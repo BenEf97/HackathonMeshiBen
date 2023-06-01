@@ -96,6 +96,19 @@ end
 	 reg [31:0] D5;
 	 reg [31:0] D6;
 	 reg [31:0] D7; 
+	 reg [31:0] D8; 
+	 reg [31:0] D9;
+	 reg [31:0] D10;
+	 reg [31:0] D11;
+	 reg [31:0] D12;
+	 reg [31:0] D13;
+	 reg [31:0] D14;
+	 reg [31:0] D15;
+
+
+	
+	 //word register
+	 reg [31:0] k[63:0];
 	 
 	 // SHA256Init hardware initilize
 	 always@(posedge clk or negedge rst_n) begin
@@ -109,15 +122,92 @@ end
 			state5 <= 32'h0x9b05688c;
 			state6 <= 32'h0x1f83d9ab;
 			state7 <= 32'h0x5be0cd19;
+//			k[0] <= 32'h0x428a2f98;
+//			k[1] <= 32'h0x71374491;
+//			k[2] <= 32'h0xb5c0fbcf;
+//			k[3] <= 32'h0xe9b5dba5;
+//			k[4] <= 32'h0x3956c25b;
+//			k[5] <= 32'h0x59f111f1;
+//			k[6] <= 32'h0x923f82a4;
+//			k[7] <= 32'h0xab1c5ed5;
+//			k[8] <= 32'h0xd807aa98;
+//			k[9] <= 32'h0x12835b01;
+//			k[10] <= 32'h0x243185be;
+//			k[11] <= 32'h0x550c7dc3;
+//			k[12] <= 32'h0x72be5d74;
+//			k[13] <= 32'h0x80deb1fe;
+//			k[14] <= 32'h0x9bdc06a7;
+//			k[15] <= 32'h0xc19bf174;
+//			k[16] <= 32'h0xe49b69c1;
+//			k[17] <= 32'h0xefbe4786;
+//			k[18] <= 32'h0x0fc19dc6;
+//			k[19] <= 32'h0x240ca1cc;
+//			k[20] <= 32'h0x2de92c6f;
+//			k[21] <= 32'h0x4a7484aa;
+//			k[22] <= 32'h0x5cb0a9dc;
+//			k[23] <= 32'h0x76f988da;
+//			k[24] <= 32'h0x983e5152;
+//			k[25] <= 32'h0xa831c66d;
+//			k[26] <= 32'h0xb00327c8;
+//			k[27] <= 32'h0xbf597fc7;
+//			k[28] <= 32'h0xc6e00bf3;
+//			k[29] <= 32'h0xd5a79147;
+//			k[30] <= 32'h0x06ca6351;
+//			k[31] <= 32'h0x14292967;
+//			k[32] <= 32'h0x27b70a85;
+//			k[33] <= 32'h0x2e1b2138;
+//			k[34] <= 32'h0x4d2c6dfc;
+//			k[35] <= 32'h0x53380d13;
+//			k[36] <= 32'h0x650a7354;
+//			k[37] <= 32'h0x766a0abb;
+//			k[38] <= 32'h0x81c2c92e;
+//			k[39] <= 32'h0x92722c85;
+//			k[40] <= 32'h0xa2bfe8a1;
+//			k[41] <= 32'h0xa81a664b;
+//			k[42] <= 32'h0xc24b8b70;
+//			k[43] <= 32'h0xc76c51a3;
+//			k[44] <= 32'h0xd192e819;
+//			k[45] <= 32'h0xd6990624;
+//			k[46] <= 32'h0xf40e3585;
+//			k[47] <= 32'h0x106aa070;
+//			k[48] <= 32'h0x19a4c116;
+//			k[49] <= 32'h0x1e376c08;
+//			k[50] <= 32'h0x2748774c;
+//			k[51] <= 32'h0x34b0bcb5;
+//			k[52] <= 32'h0x391c0cb3;
+//			k[53] <= 32'h0x4ed8aa4a;
+//			k[54] <= 32'h0x5b9cca4f;
+//			k[55] <= 32'h0x682e6ff3;
+//			k[56] <= 32'h0x748f82ee;
+//			k[57] <= 32'h0x78a5636f;
+//			k[58] <= 32'h0x84c87814;
+//			k[59] <= 32'h0x8cc70208;
+//			k[60] <= 32'h0x90befffa;
+//			k[61] <= 32'h0xa4506ceb;
+//			k[62] <= 32'h0xbef9a3f7;
+//			k[63] <= 32'h0xc67178f2;
+
 		end
-		//else
-		//end
+		else begin
+			if (dmem_wr) begin
+				//write to states, maybe also data
+				state0 <= (dmem_addr[8:2] == 7'b0000101) ? dmem_writedata : state0;
+				state1 <= (dmem_addr[8:2] == 7'b0000110) ? dmem_writedata : state1;
+				state2 <= (dmem_addr[8:2] == 7'b0001000) ? dmem_writedata : state2;
+				state3 <= (dmem_addr[8:2] == 7'b0001001) ? dmem_writedata : state3;
+				state4 <= (dmem_addr[8:2] == 7'b0001010) ? dmem_writedata : state4;
+				state5 <= (dmem_addr[8:2] == 7'b0001011) ? dmem_writedata : state5;				
+				state6 <= (dmem_addr[8:2] == 7'b0001100) ? dmem_writedata : state6;
+				state7 <= (dmem_addr[8:2] == 7'b0001101) ? dmem_writedata : state7;
+		end
+			end
+			
 	 end
 
 	 assign ctr = counter;
 	 
 	 //read register
-	 always @(dmem_addr[8:2], data_A, data_B, data_C, counter, done_bit, go_bit, counter,state0,state1,state2,state3,state4,state5,state6,state7,D0,D1,D2,D3,D4,D5,D6,D7) begin
+	 always @(dmem_addr[8:2], data_A, data_B, data_C, counter, done_bit, go_bit, counter,state0,state1,state2,state3,state4,state5,state6,state7,D0,D1,D2,D3,D4,D5,D6,D7,D8,D9,D10,D11,D12,D13,D14,D15) begin
 		case(dmem_addr[8:2])
 		7'b0000000: dmem_rdata_local = {done_bit, 30'b0, go_bit};
 		7'b0000001: dmem_rdata_local = {16'b0, counter}; 
@@ -143,6 +233,17 @@ end
 		7'b0010010: dmem_rdata_local = D5;
 		7'b0010011: dmem_rdata_local = D6;
 		7'b0010100: dmem_rdata_local = D7;
+		7'b0010101: dmem_rdata_local = D8;
+		7'b0010110: dmem_rdata_local = D9;
+		7'b0010111: dmem_rdata_local = D10;
+		7'b0011000: dmem_rdata_local = D11;
+		7'b0011001: dmem_rdata_local = D12;
+		7'b0011110: dmem_rdata_local = D13;
+		7'b0011111: dmem_rdata_local = D14;
+		7'b0011100: dmem_rdata_local = D15;
+
+		//k words
+		//7'b0010101: dmem_rdata_local = k[0];
 		
 		default: dmem_rdata_local = 32'b0;
 		endcase
@@ -164,26 +265,18 @@ end
 			if (dmem_wr) begin
 				data_A <= (dmem_addr[8:2] == 7'b0000010) ? dmem_writedata : data_A;
 				data_B <= (dmem_addr[8:2] == 7'b0000011) ? dmem_writedata : data_B;
-//				state0 <= (dmem_addr[8:2] == 7'b0000101) ? dmem_writedata : state0;
-//				state1 <= (dmem_addr[8:2] == 7'b0000110) ? dmem_writedata : state1;
-//				state2 <= (dmem_addr[8:2] == 7'b0001000) ? dmem_writedata : state2;
-//				state3 <= (dmem_addr[8:2] == 7'b0001001) ? dmem_writedata : state3;
-//				state4 <= (dmem_addr[8:2] == 7'b0001010) ? dmem_writedata : state4;
-//				state5 <= (dmem_addr[8:2] == 7'b0001011) ? dmem_writedata : state5;
-//				state6 <= (dmem_addr[8:2] == 7'b0001100) ? dmem_writedata : state6;
-//				state7 <= (dmem_addr[8:2] == 7'b0001101) ? dmem_writedata : state7;
 			end
 			else begin
 				data_A <= data_A;
 				data_B <= data_B;
-				state0 <= state0;
-				state1 <= state1;
-				state2 <= state2;
-				state3 <= state3;
-				state4 <= state4;
-				state5 <= state5;
-				state6 <= state6;
-				state7 <= state7;
+	//			state0 <= state0;
+	//			state1 <= state1;
+	//			state2 <= state2;
+	//			state3 <= state3;
+	//			state4 <= state4;
+	//			state5 <= state5;
+	//			state6 <= state6;
+	//			state7 <= state7;
 			end
 			counter <= go_bit_in? 16'h00 : done_bit_in ? counter : counter +16'h01;
 		end

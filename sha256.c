@@ -6,23 +6,50 @@
 
 //base memory for accelerator
 #define ACCEL_BASE 0x00030000
+
+/*Memory Map
+0- done--go
+1-counter
+2-data_A
+3-data_B
+4-data_C
+5-State0
+6-State1
+7-State2
+8-State3
+9-State4
+10-State5
+11-State6
+12-State7
+13-Data0
+14-Data1
+15-Data2
+16-Data3
+17-Data4
+18-Data5
+19-Data6
+20-Data7
+21-Data8
+22-k
+*/
 #define ACCEL_GO_REG (*(volatile uint32_t *)(ACCEL_BASE))
-#define ACCEL_PERF_COUNTER (*(volatile uint32_t *)(ACCEL_BASE + 0x4))
-// A regs
-#define ACCEL_A (*(volatile uint32_t *)(ACCEL_BASE + 0x8))
-// B regs
-#define ACCEL_B (*(volatile uint32_t *)(ACCEL_BASE + 0xC))
-// C regs
-#define ACCEL_C (*(volatile uint32_t *)(ACCEL_BASE + 0x10))
-// State Regs
-#define ACCEL_STATE0 (*(volatile uint32_t *)(ACCEL_BASE + 0x14))
-#define ACCEL_STATE1 (*(volatile uint32_t *)(ACCEL_BASE + 0x18))
-#define ACCEL_STATE2 (*(volatile uint32_t *)(ACCEL_BASE + 0x1C))
-#define ACCEL_STATE3 (*(volatile uint32_t *)(ACCEL_BASE + 0x20))
-#define ACCEL_STATE4 (*(volatile uint32_t *)(ACCEL_BASE + 0x24))
-#define ACCEL_STATE5 (*(volatile uint32_t *)(ACCEL_BASE + 0x28))
-#define ACCEL_STATE6 (*(volatile uint32_t *)(ACCEL_BASE + 0x2C))
-#define ACCEL_STATE7 (*(volatile uint32_t *)(ACCEL_BASE + 0x30))
+////All the macros
+// #define ACCEL_PERF_COUNTER (*(volatile uint32_t *)(ACCEL_BASE + 0x4))
+// // A regs
+// #define ACCEL_A (*(volatile uint32_t *)(ACCEL_BASE + 0x8))
+// // B regs
+// #define ACCEL_B (*(volatile uint32_t *)(ACCEL_BASE + 0xC))
+// // C regs
+// #define ACCEL_C (*(volatile uint32_t *)(ACCEL_BASE + 0x10))
+// // State Regs
+// #define ACCEL_STATE0 (*(volatile uint32_t *)(ACCEL_BASE + 0x14))
+// #define ACCEL_STATE1 (*(volatile uint32_t *)(ACCEL_BASE + 0x18))
+// #define ACCEL_STATE2 (*(volatile uint32_t *)(ACCEL_BASE + 0x1C))
+// #define ACCEL_STATE3 (*(volatile uint32_t *)(ACCEL_BASE + 0x20))
+// #define ACCEL_STATE4 (*(volatile uint32_t *)(ACCEL_BASE + 0x24))
+// #define ACCEL_STATE5 (*(volatile uint32_t *)(ACCEL_BASE + 0x28))
+// #define ACCEL_STATE6 (*(volatile uint32_t *)(ACCEL_BASE + 0x2C))
+// #define ACCEL_STATE7 (*(volatile uint32_t *)(ACCEL_BASE + 0x30))
 
 #define uchar unsigned char
 #define uint unsigned int
@@ -61,18 +88,6 @@ uint total_num_of_sha256_ops = 0;
 
 void SHA256Init(SHA256_CTX *ctx)
 {
-	// ctx->datalen = 0;
-	// ctx->bitlen[0] = 0;
-	// ctx->bitlen[1] = 0;
-	// ctx->state[0] = ACCEL_STATE0;
-	// ctx->state[1] = ACCEL_STATE1;
-	// ctx->state[2] = ACCEL_STATE2;
-	// ctx->state[3] = ACCEL_STATE3;
-	// ctx->state[4] = ACCEL_STATE4;
-	// ctx->state[5] = ACCEL_STATE5;
-	// ctx->state[6] = 0x1f83d9ab;
-	// ctx->state[7] = 0x5be0cd19;
-
 	ctx->datalen = 0;
 	ctx->bitlen[0] = 0;
 	ctx->bitlen[1] = 0;
@@ -84,8 +99,6 @@ void SHA256Init(SHA256_CTX *ctx)
 	ctx->state[5] = 0x9b05688c;
 	ctx->state[6] = 0x1f83d9ab;
 	ctx->state[7] = 0x5be0cd19;
-
-	
 }
 
 void SHA256Transform(SHA256_CTX *ctx, uchar data[])
@@ -106,6 +119,15 @@ void SHA256Transform(SHA256_CTX *ctx, uchar data[])
 	g = ctx->state[6];
 	h = ctx->state[7];
 
+	// a = ACCEL_STATE0;
+	// b = ACCEL_STATE1;
+	// c = ACCEL_STATE2;
+	// d = ACCEL_STATE3;
+	// e = ACCEL_STATE4;
+	// f = ACCEL_STATE5;
+	// g = ACCEL_STATE6;
+	// h = ACCEL_STATE7;
+
 	for (i = 0; i < 64; ++i) {
 		t1 = h + EP1(e) + CH(e, f, g) + k[i] + m[i];
 		t2 = EP0(a) + MAJ(a, b, c);
@@ -119,14 +141,25 @@ void SHA256Transform(SHA256_CTX *ctx, uchar data[])
 		a = t1 + t2;
 	}
 
-	ctx->state[0] += a;
-	ctx->state[1] += b;
-	ctx->state[2] += c;
-	ctx->state[3] += d;
-	ctx->state[4] += e;
-	ctx->state[5] += f;
-	ctx->state[6] += g;
-	ctx->state[7] += h;
+	a = ctx->state[0];
+	b = ctx->state[1];
+	c = ctx->state[2];
+	d = ctx->state[3];
+	e = ctx->state[4];
+	f = ctx->state[5];
+	g = ctx->state[6];
+	h = ctx->state[7];
+
+	// ACCEL_STATE0 += a;
+	// ACCEL_STATE1 += b;
+	// ACCEL_STATE2 += c;
+	// ACCEL_STATE3 += d;
+	// ACCEL_STATE4 += e;
+	// ACCEL_STATE5 += f;
+	// ACCEL_STATE6 += g;
+	// ACCEL_STATE7 += h;
+
+
     //****** Do not remove this/modify code ******
 	total_num_of_sha256_ops++;
     //****** End of do not remove/modify this code ******
@@ -182,6 +215,15 @@ void SHA256Final(SHA256_CTX *ctx, uchar hash[])
 		hash[i + 20] = (ctx->state[5] >> (24 - i * 8)) & 0x000000ff;
 		hash[i + 24] = (ctx->state[6] >> (24 - i * 8)) & 0x000000ff;
 		hash[i + 28] = (ctx->state[7] >> (24 - i * 8)) & 0x000000ff;
+
+		// hash[i] = (ACCEL_STATE0 >> (24 - i * 8)) & 0x000000ff;
+		// hash[i + 4] = (ACCEL_STATE1 >> (24 - i * 8)) & 0x000000ff;
+		// hash[i + 8] = (ACCEL_STATE2 >> (24 - i * 8)) & 0x000000ff;
+		// hash[i + 12] = (ACCEL_STATE3 >> (24 - i * 8)) & 0x000000ff;
+		// hash[i + 16] = (ACCEL_STATE4 >> (24 - i * 8)) & 0x000000ff;
+		// hash[i + 20] = (ACCEL_STATE5 >> (24 - i * 8)) & 0x000000ff;
+		// hash[i + 24] = (ACCEL_STATE6 >> (24 - i * 8)) & 0x000000ff;
+		// hash[i + 28] = (ACCEL_STATE7 >> (24 - i * 8)) & 0x000000ff;
 	}
 }
 
@@ -272,8 +314,22 @@ int main(void)
 //         x=ACCEL_GO_REG;
 //     }
 //    //End cycle read
-	printf("ACCEL_STATE0: %x, adress: %p \n", ACCEL_STATE0, &ACCEL_STATE0);
-	printf("ACCEL_STATE1: %x, adress: %p \n", ACCEL_STATE1, &ACCEL_STATE1);
+
+uint32_t *ptr = (uint32_t *)ACCEL_BASE;
+
+//ptr[1] = 0x12345678;
+//ptr[2] = 0xaabbccdf;
+
+printf("k[0]: %x, address: %p \n",ptr[22],&ptr[22]);
+printf("k[1]: %x, address: %p \n",ptr[23],&ptr[23]);
+
+//printf("%d %d\n, ptr[22], ptr[1]");
+
+
+//old debug:
+// printf("ACCEL_STATE0: %x, adress: %p \n", ACCEL_STATE0, &ACCEL_STATE0);
+// printf("ACCEL_STATE1: %x, adress: %p \n", ACCEL_STATE1, &ACCEL_STATE1);
 
     return 0;
 }
+
