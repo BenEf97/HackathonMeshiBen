@@ -117,7 +117,7 @@ end
 	 assign ctr = counter;
 	 
 	 //read register
-	 always @(dmem_addr[8:2], data_A, data_B, data_C, counter, done_bit, go_bit, counter) begin
+	 always @(dmem_addr[8:2], data_A, data_B, data_C, counter, done_bit, go_bit, counter,state0,state1,state2,state3,state4,state5,state6,state7,D0,D1,D2,D3,D4,D5,D6,D7) begin
 		case(dmem_addr[8:2])
 		7'b0000000: dmem_rdata_local = {done_bit, 30'b0, go_bit};
 		7'b0000001: dmem_rdata_local = {16'b0, counter}; 
@@ -163,15 +163,15 @@ end
 		else begin
 			if (dmem_wr) begin
 				data_A <= (dmem_addr[8:2] == 7'b0000010) ? dmem_writedata : data_A;
-				data_B <= (dmem_addr[8:2] == 7'b000011) ? dmem_writedata : data_B;
-				state0 <= (dmem_addr[8:2] == 7'b000101) ? dmem_writedata : state0;
-				state1 <= (dmem_addr[8:2] == 7'b000110) ? dmem_writedata : state1;
-				state2 <= (dmem_addr[8:2] == 7'b0001000) ? dmem_writedata : state2;
-				state3 <= (dmem_addr[8:2] == 7'b0001001) ? dmem_writedata : state3;
-				state4 <= (dmem_addr[8:2] == 7'b0001010) ? dmem_writedata : state4;
-				state5 <= (dmem_addr[8:2] == 7'b0001011) ? dmem_writedata : state5;
-				state6 <= (dmem_addr[8:2] == 7'b0001100) ? dmem_writedata : state6;
-				state7 <= (dmem_addr[8:2] == 7'b0001101) ? dmem_writedata : state7;
+				data_B <= (dmem_addr[8:2] == 7'b0000011) ? dmem_writedata : data_B;
+//				state0 <= (dmem_addr[8:2] == 7'b0000101) ? dmem_writedata : state0;
+//				state1 <= (dmem_addr[8:2] == 7'b0000110) ? dmem_writedata : state1;
+//				state2 <= (dmem_addr[8:2] == 7'b0001000) ? dmem_writedata : state2;
+//				state3 <= (dmem_addr[8:2] == 7'b0001001) ? dmem_writedata : state3;
+//				state4 <= (dmem_addr[8:2] == 7'b0001010) ? dmem_writedata : state4;
+//				state5 <= (dmem_addr[8:2] == 7'b0001011) ? dmem_writedata : state5;
+//				state6 <= (dmem_addr[8:2] == 7'b0001100) ? dmem_writedata : state6;
+//				state7 <= (dmem_addr[8:2] == 7'b0001101) ? dmem_writedata : state7;
 			end
 			else begin
 				data_A <= data_A;
