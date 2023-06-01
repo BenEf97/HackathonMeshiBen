@@ -87,11 +87,20 @@ end
 	 reg [31:0] state6;
 	 reg [31:0] state7;
 
+	 //data registers
+	 reg [31:0] D0;
+	 reg [31:0] D1;
+	 reg [31:0] D2;
+	 reg [31:0] D3;
+	 reg [31:0] D4;
+	 reg [31:0] D5;
+	 reg [31:0] D6;
+	 reg [31:0] D7; 
 	 
 	 // SHA256Init hardware initilize
 	 always@(posedge clk or negedge rst_n) begin
 		//if reset button is pressed then initilize the registers, maybe add a go button for later
-		if(~rst_n) begin
+		if(!rst_n) begin
 			state0 <= 32'h0x6a09e667;
 			state1 <= 32'h0xbb67ae85;
 			state2 <= 32'h0x3c6ef372;
@@ -107,18 +116,39 @@ end
 
 	 assign ctr = counter;
 	 
-	 always @(dmem_addr[4:2], data_A, data_B, data_C, counter, done_bit, go_bit, counter) begin
-		case(dmem_addr[4:2])
-		3'b000: dmem_rdata_local = {done_bit, 30'b0, go_bit};
-		3'b001: dmem_rdata_local = {16'b0, counter}; 
-		3'b010: dmem_rdata_local = data_A;
-		3'b011: dmem_rdata_local = data_B;
-		3'b100: dmem_rdata_local = data_C;
+	 //read register
+	 always @(dmem_addr[8:2], data_A, data_B, data_C, counter, done_bit, go_bit, counter) begin
+		case(dmem_addr[8:2])
+		7'b0000000: dmem_rdata_local = {done_bit, 30'b0, go_bit};
+		7'b0000001: dmem_rdata_local = {16'b0, counter}; 
+		7'b0000010: dmem_rdata_local = data_A;
+		7'b0000011: dmem_rdata_local = data_B;
+		7'b0000100: dmem_rdata_local = data_C;
+		//new registers allocation
+		//state registers
+		7'b0000101: dmem_rdata_local = state0;
+		7'b0000110: dmem_rdata_local = state1;
+		7'b0000111: dmem_rdata_local = state2;
+		7'b0001000: dmem_rdata_local = state3;
+		7'b0001001: dmem_rdata_local = state4;
+		7'b0001010: dmem_rdata_local = state5;
+		7'b0001011: dmem_rdata_local = state6;
+		7'b0001100: dmem_rdata_local = state7;
+		//data registers
+		7'b0001101: dmem_rdata_local = D0;
+		7'b0001110: dmem_rdata_local = D1;
+		7'b0001111: dmem_rdata_local = D2;
+		7'b0010000: dmem_rdata_local = D3;
+		7'b0010001: dmem_rdata_local = D4;
+		7'b0010010: dmem_rdata_local = D5;
+		7'b0010011: dmem_rdata_local = D6;
+		7'b0010100: dmem_rdata_local = D7;
+		
 		default: dmem_rdata_local = 32'b0;
 		endcase
 	 end
 	 
-	 assign go_bit_in = (dmem_wr & (dmem_addr[4:2] == 3'b000));
+	 assign go_bit_in = (dmem_wr & (dmem_addr[8:2] == 7'b0000000));
 	
 	 always @(posedge clk or negedge rst_n)
 		if(~rst_n) go_bit <= 1'b0;
@@ -132,12 +162,28 @@ end
 		end
 		else begin
 			if (dmem_wr) begin
-				data_A <= (dmem_addr[4:2] == 3'b010) ? dmem_writedata : data_A;
-				data_B <= (dmem_addr[4:2] == 3'b011) ? dmem_writedata : data_B;
+				data_A <= (dmem_addr[8:2] == 7'b0000010) ? dmem_writedata : data_A;
+				data_B <= (dmem_addr[8:2] == 7'b000011) ? dmem_writedata : data_B;
+				state0 <= (dmem_addr[8:2] == 7'b000101) ? dmem_writedata : state0;
+				state1 <= (dmem_addr[8:2] == 7'b000110) ? dmem_writedata : state1;
+				state2 <= (dmem_addr[8:2] == 7'b0001000) ? dmem_writedata : state2;
+				state3 <= (dmem_addr[8:2] == 7'b0001001) ? dmem_writedata : state3;
+				state4 <= (dmem_addr[8:2] == 7'b0001010) ? dmem_writedata : state4;
+				state5 <= (dmem_addr[8:2] == 7'b0001011) ? dmem_writedata : state5;
+				state6 <= (dmem_addr[8:2] == 7'b0001100) ? dmem_writedata : state6;
+				state7 <= (dmem_addr[8:2] == 7'b0001101) ? dmem_writedata : state7;
 			end
 			else begin
 				data_A <= data_A;
 				data_B <= data_B;
+				state0 <= state0;
+				state1 <= state1;
+				state2 <= state2;
+				state3 <= state3;
+				state4 <= state4;
+				state5 <= state5;
+				state6 <= state6;
+				state7 <= state7;
 			end
 			counter <= go_bit_in? 16'h00 : done_bit_in ? counter : counter +16'h01;
 		end
