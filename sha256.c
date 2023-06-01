@@ -30,7 +30,14 @@
 19-Data6
 20-Data7
 21-Data8
-22-k
+22-Data9
+23-Data10
+24-Data11
+25-Data12
+26-Data13
+27-Data14
+28-Data15
+29-m[0]
 */
 #define ACCEL_GO_REG (*(volatile uint32_t *)(ACCEL_BASE))
 ////All the macros
@@ -320,10 +327,12 @@ uint32_t *ptr = (uint32_t *)ACCEL_BASE;
 //ptr[1] = 0x12345678;
 //ptr[2] = 0xaabbccdf;
 
-printf("k[0]: %x, address: %p \n",ptr[5],&ptr[5]);
-ptr[5]=0x12345678;
-printf("k[0]: %x, address: %p \n",ptr[5],&ptr[5]);
-
+printf("m[0]: %x, address: %p \n",ptr[29],&ptr[29]);
+ptr[29]=0x12345678;
+printf("m[0]: %x, address: %p \n",ptr[29],&ptr[29]);
+printf("Data0: %x, address: %p \n",ptr[13],&ptr[13]);
+ptr[13]=0x87654321;
+printf("Data0: %x, address: %p \n",ptr[13],&ptr[13]);
 //printf("%d %d\n, ptr[22], ptr[1]");
 
 

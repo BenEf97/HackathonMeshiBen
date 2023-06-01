@@ -105,7 +105,71 @@ end
 	 reg [31:0] D14;
 	 reg [31:0] D15;
 
-
+//m registers
+	reg [31:0] m0;
+	reg [31:0] m1;
+	reg [31:0] m2;
+	reg [31:0] m3;
+	reg [31:0] m4;
+	reg [31:0] m5;
+	reg [31:0] m6;
+	reg [31:0] m7;
+	reg [31:0] m8;
+	reg [31:0] m9;
+	reg [31:0] m10;
+	reg [31:0] m11;
+	reg [31:0] m12;
+	reg [31:0] m13;
+	reg [31:0] m14;
+	reg [31:0] m15;
+	reg [31:0] m16;
+	reg [31:0] m17;
+	reg [31:0] m18;
+	reg [31:0] m19;
+	reg [31:0] m20;
+	reg [31:0] m21;
+	reg [31:0] m22;
+	reg [31:0] m23;
+	reg [31:0] m24;
+	reg [31:0] m25;
+	reg [31:0] m26;
+	reg [31:0] m27;
+	reg [31:0] m28;
+	reg [31:0] m29;
+	reg [31:0] m30;
+	reg [31:0] m31;
+	reg [31:0] m32;
+	reg [31:0] m33;
+	reg [31:0] m34;
+	reg [31:0] m35;
+	reg [31:0] m36;
+	reg [31:0] m37;
+	reg [31:0] m38;
+	reg [31:0] m39;
+	reg [31:0] m40;
+	reg [31:0] m41;
+	reg [31:0] m42;
+	reg [31:0] m43;
+	reg [31:0] m44;
+	reg [31:0] m45;
+	reg [31:0] m46;
+	reg [31:0] m47;
+	reg [31:0] m48;
+	reg [31:0] m49;
+	reg [31:0] m50;
+	reg [31:0] m51;
+	reg [31:0] m52;
+	reg [31:0] m53;
+	reg [31:0] m54;
+	reg [31:0] m55;
+	reg [31:0] m56;
+	reg [31:0] m57;
+	reg [31:0] m58;
+	reg [31:0] m59;
+	reg [31:0] m60;
+	reg [31:0] m61;
+	reg [31:0] m62;
+	reg [31:0] m63;
 	
 	 //word register
 	 reg [31:0] k[63:0];
@@ -187,6 +251,8 @@ end
 //			k[62] <= 32'h0xbef9a3f7;
 //			k[63] <= 32'h0xc67178f2;
 
+		
+	 
 		end
 		
 		else begin
@@ -200,6 +266,88 @@ end
 				state5 <= (dmem_addr[8:2] == 7'b0001011) ? dmem_writedata : state5;				
 				state6 <= (dmem_addr[8:2] == 7'b0001100) ? dmem_writedata : state6;
 				state7 <= (dmem_addr[8:2] == 7'b0001101) ? dmem_writedata : state7;
+
+				D0 <= (dmem_addr[8:2] == 7'b0001101) ? dmem_writedata : D0;
+				D1 <= (dmem_addr[8:2] == 7'b0001110) ? dmem_writedata : D1;
+				D2 <= (dmem_addr[8:2] == 7'b0001111) ? dmem_writedata : D2;
+				D3 <= (dmem_addr[8:2] == 7'b0010000) ? dmem_writedata : D3;
+				D4 <= (dmem_addr[8:2] == 7'b0010001) ? dmem_writedata : D4;
+				D5 <= (dmem_addr[8:2] == 7'b0010010) ? dmem_writedata : D5;
+				D6 <= (dmem_addr[8:2] == 7'b0010011) ? dmem_writedata : D6;
+				D7 <= (dmem_addr[8:2] == 7'b0010100) ? dmem_writedata : D7;
+				D8 <= (dmem_addr[8:2] == 7'b0010101) ? dmem_writedata : D8;
+				D9 <= (dmem_addr[8:2] == 7'b0010110) ? dmem_writedata : D9;
+				D10 <= (dmem_addr[8:2] == 7'b0010111) ? dmem_writedata : D10;
+				D11 <= (dmem_addr[8:2] == 7'b0011000) ? dmem_writedata : D11;
+				D12 <= (dmem_addr[8:2] == 7'b0011001) ? dmem_writedata : D12;
+				D13 <= (dmem_addr[8:2] == 7'b0011010) ? dmem_writedata : D13;
+				D14 <= (dmem_addr[8:2] == 7'b0011011) ? dmem_writedata : D14;
+				D15 <= (dmem_addr[8:2] == 7'b0011100) ? dmem_writedata : D15;
+				
+				m0 <= (dmem_addr[8:2] == 7'b0011101) ? dmem_writedata : m0;
+				m1 <= (dmem_addr[8:2] == 7'b0011110) ? dmem_writedata : m1;
+				m2 <= (dmem_addr[8:2] == 7'b0011111) ? dmem_writedata : m2;
+				m3 <= (dmem_addr[8:2] == 7'b0100000) ? dmem_writedata : m3;
+				m4 <= (dmem_addr[8:2] == 7'b0100001) ? dmem_writedata : m4;
+				m5 <= (dmem_addr[8:2] == 7'b0100010) ? dmem_writedata : m5;
+				m6 <= (dmem_addr[8:2] == 7'b0100011) ? dmem_writedata : m6;
+				m7 <= (dmem_addr[8:2] == 7'b0100100) ? dmem_writedata : m7;
+				m8 <= (dmem_addr[8:2] == 7'b0100101) ? dmem_writedata : m8;
+				m9 <= (dmem_addr[8:2] == 7'b0100110) ? dmem_writedata : m9;
+				m10 <= (dmem_addr[8:2] == 7'b0100111) ? dmem_writedata : m10;
+				m11 <= (dmem_addr[8:2] == 7'b0101000) ? dmem_writedata : m11;
+				m12 <= (dmem_addr[8:2] == 7'b0101001) ? dmem_writedata : m12;
+				m13 <= (dmem_addr[8:2] == 7'b0101010) ? dmem_writedata : m13;
+				m14 <= (dmem_addr[8:2] == 7'b0101011) ? dmem_writedata : m14;
+				m15 <= (dmem_addr[8:2] == 7'b0101100) ? dmem_writedata : m15;
+				m16 <= (dmem_addr[8:2] == 7'b0101101) ? dmem_writedata : m16;
+				m17 <= (dmem_addr[8:2] == 7'b0101110) ? dmem_writedata : m17;
+				m18 <= (dmem_addr[8:2] == 7'b0101111) ? dmem_writedata : m18;
+				m19 <= (dmem_addr[8:2] == 7'b0110000) ? dmem_writedata : m19;
+				m20 <= (dmem_addr[8:2] == 7'b0110001) ? dmem_writedata : m20;
+				m21 <= (dmem_addr[8:2] == 7'b0110010) ? dmem_writedata : m21;
+				m22 <= (dmem_addr[8:2] == 7'b0110011) ? dmem_writedata : m22;
+				m23 <= (dmem_addr[8:2] == 7'b0110100) ? dmem_writedata : m23;
+				m24 <= (dmem_addr[8:2] == 7'b0110101) ? dmem_writedata : m24;
+				m25 <= (dmem_addr[8:2] == 7'b0110110) ? dmem_writedata : m25;
+				m26 <= (dmem_addr[8:2] == 7'b0110111) ? dmem_writedata : m26;
+				m27 <= (dmem_addr[8:2] == 7'b0111000) ? dmem_writedata : m27;
+				m28 <= (dmem_addr[8:2] == 7'b0111001) ? dmem_writedata : m28;
+				m29 <= (dmem_addr[8:2] == 7'b0111010) ? dmem_writedata : m29;
+				m30 <= (dmem_addr[8:2] == 7'b0111011) ? dmem_writedata : m30;
+				m31 <= (dmem_addr[8:2] == 7'b0111100) ? dmem_writedata : m31;
+				m32 <= (dmem_addr[8:2] == 7'b0111101) ? dmem_writedata : m32;
+				m33 <= (dmem_addr[8:2] == 7'b0111110) ? dmem_writedata : m33;
+				m34 <= (dmem_addr[8:2] == 7'b0111111) ? dmem_writedata : m34;
+				m35 <= (dmem_addr[8:2] == 7'b1000000) ? dmem_writedata : m35;
+				m36 <= (dmem_addr[8:2] == 7'b1000001) ? dmem_writedata : m36;
+				m37 <= (dmem_addr[8:2] == 7'b1000010) ? dmem_writedata : m37;
+				m38 <= (dmem_addr[8:2] == 7'b1000011) ? dmem_writedata : m38;
+				m39 <= (dmem_addr[8:2] == 7'b1000100) ? dmem_writedata : m39;
+				m40 <= (dmem_addr[8:2] == 7'b1000101) ? dmem_writedata : m40;
+				m41 <= (dmem_addr[8:2] == 7'b1000110) ? dmem_writedata : m41;
+				m42 <= (dmem_addr[8:2] == 7'b1000111) ? dmem_writedata : m42;
+				m43 <= (dmem_addr[8:2] == 7'b1001000) ? dmem_writedata : m43;
+				m44 <= (dmem_addr[8:2] == 7'b1001001) ? dmem_writedata : m44;
+				m45 <= (dmem_addr[8:2] == 7'b1001010) ? dmem_writedata : m45;
+				m46 <= (dmem_addr[8:2] == 7'b1001011) ? dmem_writedata : m46;
+				m47 <= (dmem_addr[8:2] == 7'b1001100) ? dmem_writedata : m47;
+				m48 <= (dmem_addr[8:2] == 7'b1001101) ? dmem_writedata : m48;
+				m49 <= (dmem_addr[8:2] == 7'b1001110) ? dmem_writedata : m49;
+				m50 <= (dmem_addr[8:2] == 7'b1001111) ? dmem_writedata : m50;
+				m51 <= (dmem_addr[8:2] == 7'b1010000) ? dmem_writedata : m51;
+				m52 <= (dmem_addr[8:2] == 7'b1010001) ? dmem_writedata : m52;
+				m53 <= (dmem_addr[8:2] == 7'b1010010) ? dmem_writedata : m53;
+				m54 <= (dmem_addr[8:2] == 7'b1010011) ? dmem_writedata : m54;
+				m55 <= (dmem_addr[8:2] == 7'b1010100) ? dmem_writedata : m55;
+				m56 <= (dmem_addr[8:2] == 7'b1010101) ? dmem_writedata : m56;
+				m57 <= (dmem_addr[8:2] == 7'b1010110) ? dmem_writedata : m57;
+				m58 <= (dmem_addr[8:2] == 7'b1010111) ? dmem_writedata : m58;
+				m59 <= (dmem_addr[8:2] == 7'b1011000) ? dmem_writedata : m59;
+				m60 <= (dmem_addr[8:2] == 7'b1011001) ? dmem_writedata : m60;
+				m61 <= (dmem_addr[8:2] == 7'b1011010) ? dmem_writedata : m61;
+				m62 <= (dmem_addr[8:2] == 7'b1011011) ? dmem_writedata : m62;
+				m63 <= (dmem_addr[8:2] == 7'b1011100) ? dmem_writedata : m63;
 			end
 //			else begin
 //				state0 <= state0;
@@ -216,7 +364,8 @@ end
 	 assign ctr = counter;
 	 
 	 //read register
-	 always @(dmem_addr[8:2], data_A, data_B, data_C, counter, done_bit, go_bit, counter,state0,state1,state2,state3,state4,state5,state6,state7,D0,D1,D2,D3,D4,D5,D6,D7,D8,D9,D10,D11,D12,D13,D14,D15) begin
+	 //dmem_addr[8:2], data_A, data_B, data_C, counter, done_bit, go_bit, counter,state0,state1,state2,state3,state4,state5,state6,state7,D0,D1,D2,D3,D4,D5,D6,D7,D8,D9,D10,D11,D12,D13,D14,D15
+	 always @(*) begin
 		case(dmem_addr[8:2])
 		7'b0000000: dmem_rdata_local = {done_bit, 30'b0, go_bit};
 		7'b0000001: dmem_rdata_local = {16'b0, counter}; 
@@ -250,6 +399,72 @@ end
 		7'b0011010: dmem_rdata_local = D13;
 		7'b0011011: dmem_rdata_local = D14;
 		7'b0011100: dmem_rdata_local = D15;
+
+		//m registers
+		7'b0011101: dmem_rdata_local = m0;
+		7'b0011110: dmem_rdata_local = m1;
+		7'b0011111: dmem_rdata_local = m2;
+		7'b0100000: dmem_rdata_local = m3;
+		7'b0100001: dmem_rdata_local = m4;
+		7'b0100010: dmem_rdata_local = m5;
+		7'b0100011: dmem_rdata_local = m6;
+		7'b0100100: dmem_rdata_local = m7;
+		7'b0100101: dmem_rdata_local = m8;
+		7'b0100110: dmem_rdata_local = m9;
+		7'b0100111: dmem_rdata_local = m10;
+		7'b0101000: dmem_rdata_local = m11;
+		7'b0101001: dmem_rdata_local = m12;
+		7'b0101010: dmem_rdata_local = m13;
+		7'b0101011: dmem_rdata_local = m14;
+		7'b0101100: dmem_rdata_local = m15;
+		7'b0101101: dmem_rdata_local = m16;
+		7'b0101110: dmem_rdata_local = m17;
+		7'b0101111: dmem_rdata_local = m18;
+		7'b0110000: dmem_rdata_local = m19;
+		7'b0110001: dmem_rdata_local = m20;
+		7'b0110010: dmem_rdata_local = m21;
+		7'b0110011: dmem_rdata_local = m22;
+		7'b0110100: dmem_rdata_local = m23;
+		7'b0110101: dmem_rdata_local = m24;
+		7'b0110110: dmem_rdata_local = m25;
+		7'b0110111: dmem_rdata_local = m26;
+		7'b0111000: dmem_rdata_local = m27;
+		7'b0111001: dmem_rdata_local = m28;
+		7'b0111010: dmem_rdata_local = m29;
+		7'b0111011: dmem_rdata_local = m30;
+		7'b0111100: dmem_rdata_local = m31;
+		7'b0111101: dmem_rdata_local = m32;
+		7'b0111110: dmem_rdata_local = m33;
+		7'b0111111: dmem_rdata_local = m34;
+		7'b1000000: dmem_rdata_local = m35;
+		7'b1000001: dmem_rdata_local = m36;
+		7'b1000010: dmem_rdata_local = m37;
+		7'b1000011: dmem_rdata_local = m38;
+		7'b1000100: dmem_rdata_local = m39;
+		7'b1000101: dmem_rdata_local = m40;
+		7'b1000110: dmem_rdata_local = m41;
+		7'b1000111: dmem_rdata_local = m42;
+		7'b1001000: dmem_rdata_local = m43;
+		7'b1001001: dmem_rdata_local = m44;
+		7'b1001010: dmem_rdata_local = m45;
+		7'b1001011: dmem_rdata_local = m46;
+		7'b1001100: dmem_rdata_local = m47;
+		7'b1001101: dmem_rdata_local = m48;
+		7'b1001110: dmem_rdata_local = m49;
+		7'b1001111: dmem_rdata_local = m50;
+		7'b1010000: dmem_rdata_local = m51;
+		7'b1010001: dmem_rdata_local = m52;
+		7'b1010010: dmem_rdata_local = m53;
+		7'b1010011: dmem_rdata_local = m54;
+		7'b1010100: dmem_rdata_local = m55;
+		7'b1010101: dmem_rdata_local = m56;
+		7'b1010110: dmem_rdata_local = m57;
+		7'b1010111: dmem_rdata_local = m58;
+		7'b1011000: dmem_rdata_local = m59;
+		7'b1011001: dmem_rdata_local = m60;
+		7'b1011010: dmem_rdata_local = m61;
+		7'b1011011: dmem_rdata_local = m62;
+		7'b1011100: dmem_rdata_local = m63;//92
 
 		//k words
 		//7'b0010101: dmem_rdata_local = k[0];
