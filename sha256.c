@@ -320,8 +320,9 @@ uint32_t *ptr = (uint32_t *)ACCEL_BASE;
 //ptr[1] = 0x12345678;
 //ptr[2] = 0xaabbccdf;
 
-printf("k[0]: %x, address: %p \n",ptr[22],&ptr[22]);
-printf("k[1]: %x, address: %p \n",ptr[23],&ptr[23]);
+printf("k[0]: %x, address: %p \n",ptr[5],&ptr[5]);
+ptr[5]=0x12345678;
+printf("k[0]: %x, address: %p \n",ptr[5],&ptr[5]);
 
 //printf("%d %d\n, ptr[22], ptr[1]");
 

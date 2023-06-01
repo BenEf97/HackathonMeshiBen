@@ -188,6 +188,7 @@ end
 //			k[63] <= 32'h0xc67178f2;
 
 		end
+		
 		else begin
 			if (dmem_wr) begin
 				//write to states, maybe also data
@@ -199,9 +200,17 @@ end
 				state5 <= (dmem_addr[8:2] == 7'b0001011) ? dmem_writedata : state5;				
 				state6 <= (dmem_addr[8:2] == 7'b0001100) ? dmem_writedata : state6;
 				state7 <= (dmem_addr[8:2] == 7'b0001101) ? dmem_writedata : state7;
-		end
 			end
-			
+//			else begin
+//				state0 <= state0;
+//				state1 <= state1;
+//				state2 <= state2;
+//				state3 <= state3;
+//				state4 <= state4;
+//				state5 <= state5;
+//				state6 <= state6;
+//				state7 <= state7;
+		end	
 	 end
 
 	 assign ctr = counter;
@@ -238,8 +247,8 @@ end
 		7'b0010111: dmem_rdata_local = D10;
 		7'b0011000: dmem_rdata_local = D11;
 		7'b0011001: dmem_rdata_local = D12;
-		7'b0011110: dmem_rdata_local = D13;
-		7'b0011111: dmem_rdata_local = D14;
+		7'b0011010: dmem_rdata_local = D13;
+		7'b0011011: dmem_rdata_local = D14;
 		7'b0011100: dmem_rdata_local = D15;
 
 		//k words
