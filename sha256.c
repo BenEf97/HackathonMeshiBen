@@ -1,8 +1,28 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
 #include "csr.h"
 
+//base memory for accelerator
+#define ACCEL_BASE 0x00030000
+#define ACCEL_GO_REG (*(volatile uint32_t *)(ACCEL_BASE))
+#define ACCEL_PERF_COUNTER (*(volatile uint32_t *)(ACCEL_BASE + 0x4))
+// A regs
+#define ACCEL_A (*(volatile uint32_t *)(ACCEL_BASE + 0x8))
+// B regs
+#define ACCEL_B (*(volatile uint32_t *)(ACCEL_BASE + 0xC))
+// C regs
+#define ACCEL_C (*(volatile uint32_t *)(ACCEL_BASE + 0x10))
+// State Regs
+#define ACCEL_STATE0 (*(volatile uint32_t *)(ACCEL_BASE + 0x14))
+#define ACCEL_STATE1 (*(volatile uint32_t *)(ACCEL_BASE + 0x18))
+#define ACCEL_STATE2 (*(volatile uint32_t *)(ACCEL_BASE + 0x1C))
+#define ACCEL_STATE3 (*(volatile uint32_t *)(ACCEL_BASE + 0x20))
+#define ACCEL_STATE4 (*(volatile uint32_t *)(ACCEL_BASE + 0x24))
+#define ACCEL_STATE5 (*(volatile uint32_t *)(ACCEL_BASE + 0x28))
+#define ACCEL_STATE6 (*(volatile uint32_t *)(ACCEL_BASE + 0x2C))
+#define ACCEL_STATE7 (*(volatile uint32_t *)(ACCEL_BASE + 0x30))
 
 #define uchar unsigned char
 #define uint unsigned int
@@ -41,6 +61,18 @@ uint total_num_of_sha256_ops = 0;
 
 void SHA256Init(SHA256_CTX *ctx)
 {
+	// ctx->datalen = 0;
+	// ctx->bitlen[0] = 0;
+	// ctx->bitlen[1] = 0;
+	// ctx->state[0] = ACCEL_STATE0;
+	// ctx->state[1] = ACCEL_STATE1;
+	// ctx->state[2] = ACCEL_STATE2;
+	// ctx->state[3] = ACCEL_STATE3;
+	// ctx->state[4] = ACCEL_STATE4;
+	// ctx->state[5] = ACCEL_STATE5;
+	// ctx->state[6] = 0x1f83d9ab;
+	// ctx->state[7] = 0x5be0cd19;
+
 	ctx->datalen = 0;
 	ctx->bitlen[0] = 0;
 	ctx->bitlen[1] = 0;
@@ -52,6 +84,8 @@ void SHA256Init(SHA256_CTX *ctx)
 	ctx->state[5] = 0x9b05688c;
 	ctx->state[6] = 0x1f83d9ab;
 	ctx->state[7] = 0x5be0cd19;
+
+	
 }
 
 void SHA256Transform(SHA256_CTX *ctx, uchar data[])
@@ -226,6 +260,20 @@ int main(void)
     printf("Total time (hex): \t\t %08x%08x\n", total_time_h, total_time_l);
     printf("For Throughput calculation divide %d by total time (hex) %08x%08x\n", total_num_of_sha256_ops, total_time_h, total_time_l);
     //****** End of do not remove/modify this code ******
+
+	//Debug: init
+// 	//Go for 4 cycles!
+//     ACCEL_GO_REG = 0x1;
+
+//     uint32_t x = ACCEL_GO_REG;
+//     //Check MSB- done bit if its 1
+//     while (((x)>>31)==0)
+//     {
+//         x=ACCEL_GO_REG;
+//     }
+//    //End cycle read
+	printf("ACCEL_STATE0: %x, adress: %p \n", ACCEL_STATE0, &ACCEL_STATE0);
+	printf("ACCEL_STATE1: %x, adress: %p \n", ACCEL_STATE1, &ACCEL_STATE1);
 
     return 0;
 }
