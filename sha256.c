@@ -38,6 +38,10 @@
 27-Data14
 28-Data15
 29-m[0]
+.
+.
+.
+92-m[63]
 */
 #define ACCEL_GO_REG (*(volatile uint32_t *)(ACCEL_BASE))
 
@@ -108,14 +112,14 @@ void SHA256Init(SHA256_CTX *ctx)
 	ctx->bitlen[1] = 0;
 
 	//remove later
-	ctx->state[0] = 0x6a09e667;
-	ctx->state[1] = 0xbb67ae85;
-	ctx->state[2] = 0x3c6ef372;
-	ctx->state[3] = 0xa54ff53a;
-	ctx->state[4] = 0x510e527f;
-	ctx->state[5] = 0x9b05688c;
-	ctx->state[6] = 0x1f83d9ab;
-	ctx->state[7] = 0x5be0cd19;
+	// ctx->state[0] = 0x6a09e667;
+	// ctx->state[1] = 0xbb67ae85;
+	// ctx->state[2] = 0x3c6ef372;
+	// ctx->state[3] = 0xa54ff53a;
+	// ctx->state[4] = 0x510e527f;
+	// ctx->state[5] = 0x9b05688c;
+	// ctx->state[6] = 0x1f83d9ab;
+	// ctx->state[7] = 0x5be0cd19;
 }
 
 void SHA256Transform(SHA256_CTX *ctx, uchar data[])
@@ -141,33 +145,42 @@ void SHA256Transform(SHA256_CTX *ctx, uchar data[])
 	ptr[26] = tmp_ptr[13];
 	ptr[27] = tmp_ptr[14];
 	ptr[28] = tmp_ptr[15];
-	
+	ptr[0] = 1;
+
 	//first loop, we want to use it in verilog
 	for (i = 0, j = 0; i < 16; ++i, j += 4)
 		m[i] = (data[j] << 24) | (data[j + 1] << 16) | (data[j + 2] << 8) | (data[j + 3]);
 
 	for (; i < 64; ++i)
 		m[i] = SIG1(m[i - 2]) + m[i - 7] + SIG0(m[i - 15]) + m[i - 16];
+	
+	printf("accelerator: %x\nc: %x\n",ptr[29],m[0] );
+
+	// for (i = 0, j = 0; i < 16; ++i, j += 4)
+	// 	ptr[i+29] = (data[j] << 24) | (data[j + 1] << 16) | (data[j + 2] << 8) | (data[j + 3]);
+
+	// for (; i < 64; ++i)
+	// 	ptr[i+29] = SIG1(ptr[i +29- 2]) + ptr[i +29- 7] + SIG0(ptr[i+29- 15]) + ptr[i+29 - 16];
 
 	//original code, remove later
-	a = ctx->state[0];
-	b = ctx->state[1];
-	c = ctx->state[2];
-	d = ctx->state[3];
-	e = ctx->state[4];
-	f = ctx->state[5];
-	g = ctx->state[6];
-	h = ctx->state[7];
+	// a = ctx->state[0];
+	// b = ctx->state[1];
+	// c = ctx->state[2];
+	// d = ctx->state[3];
+	// e = ctx->state[4];
+	// f = ctx->state[5];
+	// g = ctx->state[6];
+	// h = ctx->state[7];
 
-	// //New code:
-	// a = ptr[5];
-	// b = ptr[6];
-	// c = ptr[7];
-	// d = ptr[8];
-	// e = ptr[9];
-	// f = ptr[10];
-	// g = ptr[11];
-	// h = ptr[12];
+	//New code:
+	a = ptr[5];
+	b = ptr[6];
+	c = ptr[7];
+	d = ptr[8];
+	e = ptr[9];
+	f = ptr[10];
+	g = ptr[11];
+	h = ptr[12];
 
 
 	
@@ -183,7 +196,7 @@ void SHA256Transform(SHA256_CTX *ctx, uchar data[])
 
 	for (i = 0; i < 64; ++i)
 	{
-		t1 = h + EP1(e) + CH(e, f, g) + k[i] + m[i];
+		t1 = h + EP1(e) + CH(e, f, g) + k[i] + ptr[i+29];
 		t2 = EP0(a) + MAJ(a, b, c);
 		h = g;
 		g = f;
@@ -196,24 +209,24 @@ void SHA256Transform(SHA256_CTX *ctx, uchar data[])
 	}
 
 	//original code, remove later
-	a = ctx->state[0];
-	b = ctx->state[1];
-	c = ctx->state[2];
-	d = ctx->state[3];
-	e = ctx->state[4];
-	f = ctx->state[5];
-	g = ctx->state[6];
-	h = ctx->state[7];
+	// a = ctx->state[0];
+	// b = ctx->state[1];
+	// c = ctx->state[2];
+	// d = ctx->state[3];
+	// e = ctx->state[4];
+	// f = ctx->state[5];
+	// g = ctx->state[6];
+	// h = ctx->state[7];
 
 	//New code:
-	// ptr[5] = a;
-	// ptr[6] = b;
-	// ptr[7] = c;
-	// ptr[8] = d;
-	// ptr[9] = e;
-	// ptr[10] = f;
-	// ptr[11] = g;
-	// ptr[12] = h;
+	ptr[5] += a;
+	ptr[6] += b;
+	ptr[7] += c;
+	ptr[8] += d;
+	ptr[9] += e;
+	ptr[10] += f;
+	ptr[11] += g;
+	ptr[12] += h;
 
 	//older code, macros
 	// ACCEL_STATE0 += a;
@@ -234,7 +247,7 @@ void SHA256Update(SHA256_CTX *ctx, uchar data[], uint len)
 {
 	for (uint i = 0; i < len; ++i)
 	{
-		ctx->data[ctx->datalen] = data[i];
+		ptr[ctx->datalen] = data[i];
 		ctx->datalen++;
 		if (ctx->datalen == 64)
 		{
@@ -242,6 +255,15 @@ void SHA256Update(SHA256_CTX *ctx, uchar data[], uint len)
 			DBL_INT_ADD(ctx->bitlen[0], ctx->bitlen[1], 512);
 			ctx->datalen = 0;
 		}
+
+		// ctx->data[ctx->datalen] = data[i];
+		// ctx->datalen++;
+		// if (ctx->datalen == 64)
+		// {
+		// 	SHA256Transform(ctx, ctx->data);
+		// 	DBL_INT_ADD(ctx->bitlen[0], ctx->bitlen[1], 512);
+		// 	ctx->datalen = 0;
+		// }
 	}
 }
 
@@ -277,24 +299,24 @@ void SHA256Final(SHA256_CTX *ctx, uchar hash[])
 
 	for (i = 0; i < 4; ++i)
 	{
-		hash[i] = (ctx->state[0] >> (24 - i * 8)) & 0x000000ff;
-		hash[i + 4] = (ctx->state[1] >> (24 - i * 8)) & 0x000000ff;
-		hash[i + 8] = (ctx->state[2] >> (24 - i * 8)) & 0x000000ff;
-		hash[i + 12] = (ctx->state[3] >> (24 - i * 8)) & 0x000000ff;
-		hash[i + 16] = (ctx->state[4] >> (24 - i * 8)) & 0x000000ff;
-		hash[i + 20] = (ctx->state[5] >> (24 - i * 8)) & 0x000000ff;
-		hash[i + 24] = (ctx->state[6] >> (24 - i * 8)) & 0x000000ff;
-		hash[i + 28] = (ctx->state[7] >> (24 - i * 8)) & 0x000000ff;
+		// hash[i] = (ctx->state[0] >> (24 - i * 8)) & 0x000000ff;
+		// hash[i + 4] = (ctx->state[1] >> (24 - i * 8)) & 0x000000ff;
+		// hash[i + 8] = (ctx->state[2] >> (24 - i * 8)) & 0x000000ff;
+		// hash[i + 12] = (ctx->state[3] >> (24 - i * 8)) & 0x000000ff;
+		// hash[i + 16] = (ctx->state[4] >> (24 - i * 8)) & 0x000000ff;
+		// hash[i + 20] = (ctx->state[5] >> (24 - i * 8)) & 0x000000ff;
+		// hash[i + 24] = (ctx->state[6] >> (24 - i * 8)) & 0x000000ff;
+		// hash[i + 28] = (ctx->state[7] >> (24 - i * 8)) & 0x000000ff;
 
 		//newer code
-		// hash[i] = (ptr[5] >> (24 - i * 8)) & 0x000000ff;
-		// hash[i + 4] = (ptr[6]  >> (24 - i * 8)) & 0x000000ff;
-		// hash[i + 8] = (ptr[7]  >> (24 - i * 8)) & 0x000000ff;
-		// hash[i + 12] = (ptr[8]  >> (24 - i * 8)) & 0x000000ff;
-		// hash[i + 16] = (ptr[9]  >> (24 - i * 8)) & 0x000000ff;
-		// hash[i + 20] = (ptr[10]  >> (24 - i * 8)) & 0x000000ff;
-		// hash[i + 24] = (ptr[11]  >> (24 - i * 8)) & 0x000000ff;
-		// hash[i + 28] = (ptr[12]  >> (24 - i * 8)) & 0x000000ff;
+		hash[i] = (ptr[5] >> (24 - i * 8)) & 0x000000ff;
+		hash[i + 4] = (ptr[6]  >> (24 - i * 8)) & 0x000000ff;
+		hash[i + 8] = (ptr[7]  >> (24 - i * 8)) & 0x000000ff;
+		hash[i + 12] = (ptr[8]  >> (24 - i * 8)) & 0x000000ff;
+		hash[i + 16] = (ptr[9]  >> (24 - i * 8)) & 0x000000ff;
+		hash[i + 20] = (ptr[10]  >> (24 - i * 8)) & 0x000000ff;
+		hash[i + 24] = (ptr[11]  >> (24 - i * 8)) & 0x000000ff;
+		hash[i + 28] = (ptr[12]  >> (24 - i * 8)) & 0x000000ff;
 
 		//older code
 		// hash[i] = (ACCEL_STATE0 >> (24 - i * 8)) & 0x000000ff;
