@@ -154,7 +154,6 @@ void SHA256Transform(SHA256_CTX *ctx, uchar data[])
 	for (; i < 64; ++i)
 		m[i] = SIG1(m[i - 2]) + m[i - 7] + SIG0(m[i - 15]) + m[i - 16];
 	
-	printf("accelerator: %x\nc: %x\n",ptr[29],m[0] );
 
 	// for (i = 0, j = 0; i < 16; ++i, j += 4)
 	// 	ptr[i+29] = (data[j] << 24) | (data[j + 1] << 16) | (data[j + 2] << 8) | (data[j + 3]);
@@ -387,9 +386,9 @@ int main(void)
 	//****** Do not remove this/modify code ******
 	mcycle_l_end = csr_read(0xc00);
 	mcycle_h_end = csr_read(0xc80);
-	printf("***************** Performance Summary: ******************\n");
-	printf("Start time (hex): \t\t %08x%08x\n", mcycle_h_start, mcycle_l_start);
-	printf("End time (hex): \t\t %08x%08x\n", mcycle_h_end, mcycle_l_end);
+	// printf("***************** Performance Summary: ******************\n");
+	// printf("Start time (hex): \t\t %08x%08x\n", mcycle_h_start, mcycle_l_start);
+	// printf("End time (hex): \t\t %08x%08x\n", mcycle_h_end, mcycle_l_end);
 
 	if (mcycle_l_end >= mcycle_l_start)
 	{
@@ -405,33 +404,7 @@ int main(void)
 	printf("For Throughput calculation divide %d by total time (hex) %08x%08x\n", total_num_of_sha256_ops, total_time_h, total_time_l);
 	//****** End of do not remove/modify this code ******
 
-	// Debug: init
-	// 	//Go for 4 cycles!
-	//     ACCEL_GO_REG = 0x1;
 
-	//     uint32_t x = ACCEL_GO_REG;
-	//     //Check MSB- done bit if its 1
-	//     while (((x)>>31)==0)
-	//     {
-	//         x=ACCEL_GO_REG;
-	//     }
-	//    //End cycle read
-
-
-	// ptr[1] = 0x12345678;
-	// ptr[2] = 0xaabbccdf;
-
-	printf("m[0]: %x, address: %p \n", ptr[29], &ptr[29]);
-	ptr[29] = 0x12345678;
-	printf("m[0]: %x, address: %p \n", ptr[29], &ptr[29]);
-	printf("Data0: %x, address: %p \n", ptr[13], &ptr[13]);
-	ptr[13] = 0x87654321;
-	printf("Data0: %x, address: %p \n", ptr[13], &ptr[13]);
-	// printf("%d %d\n, ptr[22], ptr[1]");
-
-	// old debug:
-	//  printf("ACCEL_STATE0: %x, adress: %p \n", ACCEL_STATE0, &ACCEL_STATE0);
-	//  printf("ACCEL_STATE1: %x, adress: %p \n", ACCEL_STATE1, &ACCEL_STATE1);
 
 	return 0;
 }
